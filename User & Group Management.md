@@ -182,3 +182,75 @@ grep -E → يدور على أكتر من كلمة (Regular Expression).
 المجلدات ملك للتيم المناسب.
 
 عندنا system user (deploy) لتشغيل التطبيق بشكل آمن.
+______________________________________________________________________________________________________________________________________________________________
+🛠️ تاسك 3: ضبط الصلاحيات (Permissions)
+
+🎯 المطلوب:
+
+نخلي فريق dev يقدر يقرأ ويكتب وينفذ داخل src.
+
+نخلي فريق ops يقدر يعدل في configs بس من غير ما يحذف المجلد نفسه.
+
+نخلي فريق tester يقدر يقرأ ملفات logs لكن مش يكتب فيها.
+
+نخلي يوزر deploy هو الوحيد اللي يقدر ينفذ ملف app.py.
+
+📝 خطوات التنفيذ:
+1️⃣ dev على src
+
+    sudo chmod 770 /home/ahmed/projects/backend/src
+
+
+🔎 ده معناه:
+
+Owner & Group (يعني dev team) → full permissions (rwx).
+
+Others → no access.
+
+2️⃣ ops على configs
+
+    sudo chmod 750 /home/ahmed/projects/backend/configs
+
+
+🔎 ده معناه:
+
+Owner & Group (ops) → read + write + execute.
+
+Others → no access.
+➡️ execute على المجلد = يقدر يدخل ويعدل الملفات، لكن مش يمسح المجلد نفسه.
+
+3️⃣ tester على logs
+ 
+    sudo chmod 740 /home/ahmed/projects/backend/logs
+
+
+🔎 ده معناه:
+
+Owner → full access.
+
+Group (tester) → read only.
+
+Others → no access.
+
+4️⃣ deploy على app.py
+
+    sudo chown deploy:dev /home/ahmed/projects/backend/src/app.py
+    sudo chmod 750 /home/ahmed/projects/backend/src/app.py
+
+
+🔎 ده معناه:
+
+User deploy → يقدر ينفذ الملف (كأنه بيشغله).
+
+Group dev → يقدر يقرأ ويكتب.
+
+Others → no access.
+
+✅ مراجعة
+
+بعد كده شغل:
+
+    ls -lR /home/ahmed/projects/backend
+
+
+وتأكد من الصلاحيات إنها مطبقة صح.
